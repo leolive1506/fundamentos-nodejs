@@ -32,6 +32,25 @@ app.get('/', (request, response) => {
 app.use(express.json())
 ```
 
+- Criar middlware simples
+```js
+function verifyIfExistsAccountCPF(request, response, next) {
+    const { cpf } = request.headers
+    // some retorna true or false de acordo com a condição passada
+    const customer = customers.find(customers => customers.cpf === cpf)
+    if (!customer) {
+        return response.status(400).json({ error: 'Customer not found' })
+    }
+    // passar customer pra dentro do request pra não buscar dps dnv
+    request.customer = customer
+    return next()
+}
+// use
+app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {})
+// ou e tudo abaixo tem qeu pasasr nesse middlware
+app.use(verifyIfExistsAccountCPF)
+```
+
 # Nodemon
 - Assim qeu tiver alteração, da reload no server
 - Install
