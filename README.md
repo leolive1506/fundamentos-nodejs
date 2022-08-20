@@ -25,3 +25,19 @@ app.get('/', (request, response) => {
     return response.json({ message: 'Hello word'})
 })
 ```
+
+# Nodemon
+- Assim qeu tiver alteração, da reload no server
+- Install
+```shell
+# -D pq é somente pra desenvolvimento
+yarn add nodemon -D
+```
+
+- Package.json
+```json
+// use -> yarn dev
+"scripts": {
+    "dev": "nodemon src/index.js"
+},
+```
