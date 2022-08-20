@@ -17,6 +17,15 @@ app.post('/account', (request, response) => {
     customers.push({ cpf, name, id: uuidv4(), statement: [] })
     return response.status(201).json({ message: 'created account' })
 })
+
+app.get('/statement', (request, response) => {
+    const { cpf } = request.headers
+    const customer = customers.find(customers => customers.cpf === cpf)
+    if (!customer) {
+        return response.status(400).json({ error: 'Customer not found' })
+    }
+    return response.json(customer.statement)
+})
 // porta que vai rodar
 app.listen(3333)
 
