@@ -33,6 +33,16 @@ app.post('/account', (request, response) => {
 app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {
     return response.json(request.customer.statement)
 })
+
+app.post('/deposit', verifyIfExistsAccountCPF, (request, response) => {
+    const { description, amount } = request.body
+    const { customer } = request
+    const statementOperation = {
+        description, amount, type: 'credit', created_at: new Date()
+    }
+    customer.statement.push(statementOperation)
+    return response.status(201).json({ customer: customer })
+})
 // porta que vai rodar
 app.listen(3333)
 
