@@ -26,6 +26,12 @@ app.get('/', (request, response) => {
 })
 ```
 
+- Express não trabalha somente com json
+    - Precisa informar tipo de parametro que vai receber
+```js
+app.use(express.json())
+```
+
 # Nodemon
 - Assim qeu tiver alteração, da reload no server
 - Install
