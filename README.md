@@ -47,3 +47,20 @@ yarn add nodemon -D
     "dev": "nodemon src/index.js"
 },
 ```
+
+- UUID (id)
+```shell
+yarn add uuid
+```
+
+- Usar
+```js
+// gerar um num aleatório
+const { v4 } = require('uuid')
+```
+
+# Dicas gerais JS
+```js
+// some retorna true or false de acordo com a condição passada
+const customerAlreadyExists = customers.some(customer => customer.cpf === cpf)
+```
