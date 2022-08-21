@@ -87,6 +87,18 @@ app.get('/statement/date', verifyIfExistsAccountCPF, (request, response) => {
 
     return response.json(statement)
 })
+
+app.put('/account', verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request
+    customer.name = request.body.name
+
+    return response.status(201).json({ message: 'changed user name', customer })
+})
+
+app.get('/account', verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request
+    return response.json(customer)
+})
 // porta que vai rodar
 app.listen(3333)
 
