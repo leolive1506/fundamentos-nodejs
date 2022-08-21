@@ -18,6 +18,19 @@ function verifyIfExistsAccountCPF(request, response, next) {
     request.customer = customer
     return next()
 }
+
+function getBalance(statement) {
+    // pega informações e transforma em um unico valor
+    const balance = statement.reduce((acc, operation) => {
+        if (operation.type === 'credit') {
+            return acc + operation.amount
+        } else {
+            return acc - operation.amount
+        }
+    }, 0) 
+
+    return balance
+}
 app.post('/account', (request, response) => {
     const { cpf, name } = request.body
     // some retorna true or false de acordo com a condição passada
@@ -41,7 +54,25 @@ app.post('/deposit', verifyIfExistsAccountCPF, (request, response) => {
         description, amount, type: 'credit', created_at: new Date()
     }
     customer.statement.push(statementOperation)
-    return response.status(201).json({ customer: customer })
+    return response.status(201).json({ customer })
+})
+
+app.post('/withdraw', verifyIfExistsAccountCPF, (request, response) => {
+    const { amount } = request.body
+    const { customer } = request
+    const balance = getBalance(customer.statement)
+    console.log(balance, amount)
+
+    if (balance < amount) {
+        return response.status(400).json({ error: 'Insufficient balance' })
+    }
+
+    const statementOperation = {
+        amount, type: 'debit', created_at: new Date()
+    }
+
+    customer.statement.push(statementOperation)
+    return response.status(201).json({ customer })
 })
 // porta que vai rodar
 app.listen(3333)
