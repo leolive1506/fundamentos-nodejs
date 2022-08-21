@@ -61,7 +61,6 @@ app.post('/withdraw', verifyIfExistsAccountCPF, (request, response) => {
     const { amount } = request.body
     const { customer } = request
     const balance = getBalance(customer.statement)
-    console.log(balance, amount)
 
     if (balance < amount) {
         return response.status(400).json({ error: 'Insufficient balance' })
@@ -73,6 +72,20 @@ app.post('/withdraw', verifyIfExistsAccountCPF, (request, response) => {
 
     customer.statement.push(statementOperation)
     return response.status(201).json({ customer })
+})
+
+app.get('/statement/date', verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request
+    const { date } = request.query
+
+    // pegar qualquer horário do dia
+    const dateFormatted = new Date(date + ' 00:00')
+    
+    const statement = customer.statement.filter((statement) => {
+        return statement.created_at.toDateString() === new Date(dateFormatted).toDateString()
+    })
+
+    return response.json(statement)
 })
 // porta que vai rodar
 app.listen(3333)
